@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { useAuth } from "../../src/context/AuthContext";
 import { supabase } from "../../src/config/supabase";
+import { ThemedText } from "../../components/ThemedText";
 
 interface Post {
   id: string;
@@ -79,9 +80,9 @@ export default function ProfileScreen() {
         </Text>
       </View>
 
-      <Text style={styles.name}>{profile?.full_name || "User"}</Text>
-      <Text style={styles.username}>@{profile?.username || "username"}</Text>
-      <Text style={styles.email}>{profile?.email || user?.email}</Text>
+      <ThemedText type="bold" style={styles.name}>{profile?.full_name || "User"}</ThemedText>
+      <ThemedText type="subtitle" style={styles.username}>@{profile?.username || "username"}</ThemedText>
+      <ThemedText type="subtitle" style={styles.email}>{profile?.email || user?.email}</ThemedText>
 
       {profile?.bio && <Text style={styles.bio}>{profile.bio}</Text>}
 

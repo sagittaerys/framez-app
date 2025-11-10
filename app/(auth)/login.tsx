@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { Link } from 'expo-router';
 import { useAuth } from '../../src/context/AuthContext';
+import { ThemedText } from '../../components/ThemedText';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -40,8 +41,8 @@ export default function LoginScreen() {
       style={styles.container}
     >
       <View style={styles.content}>
-        <Text style={styles.title}>Framez</Text>
-        <Text style={styles.subtitle}>Share your moments</Text>
+        <ThemedText type='title' style={styles.title}>Framez</ThemedText>
+        <ThemedText type='subtitle' style={styles.subtitle}>Share your moments!</ThemedText>
 
         <View style={styles.form}>
           <TextInput
@@ -71,15 +72,15 @@ export default function LoginScreen() {
             {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (
-              <Text style={styles.buttonText}>Log In</Text>
+              <ThemedText style={styles.buttonText}>Log In</ThemedText>
             )}
           </TouchableOpacity>
 
           <Link href="/signup" asChild>
             <TouchableOpacity style={styles.linkButton}>
-              <Text style={styles.linkText}>
-                Don't have an account? <Text style={styles.linkBold}>Sign Up</Text>
-              </Text>
+              <ThemedText style={styles.linkText}>
+                Don't have an account? <ThemedText type='bold' style={styles.linkBold}>Sign Up</ThemedText>
+              </ThemedText>
             </TouchableOpacity>
           </Link>
         </View>

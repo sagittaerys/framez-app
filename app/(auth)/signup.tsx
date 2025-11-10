@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { Link, router } from 'expo-router';
 import { useAuth } from '../../src/context/AuthContext';
+import { ThemedText } from '../../components/ThemedText';
 
 export default function SignUpScreen() {
   const [email, setEmail] = useState('');
@@ -58,8 +59,8 @@ export default function SignUpScreen() {
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.content}>
-          <Text style={styles.title}>Create Account</Text>
-          <Text style={styles.subtitle}>Join Framez today</Text>
+          <ThemedText type='title' style={styles.title}>Create Account</ThemedText>
+          <ThemedText type='subtitle' style={styles.subtitle}>Join Framez today!</ThemedText>
 
           <View style={styles.form}>
             <TextInput
@@ -106,7 +107,7 @@ export default function SignUpScreen() {
               {loading ? (
                 <ActivityIndicator color="#fff" />
               ) : (
-                <Text style={styles.buttonText}>Sign Up</Text>
+                <ThemedText style={styles.buttonText}>Sign Up</ThemedText>
               )}
             </TouchableOpacity>
 

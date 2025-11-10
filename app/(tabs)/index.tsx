@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Image,
 } from "react-native";
+import { ThemedText } from "../../components/ThemedText";
 import { supabase } from "../../src/config/supabase";
 
 interface Post {
@@ -93,25 +94,25 @@ export default function FeedScreen() {
     <View style={styles.postCard}>
       <View style={styles.postHeader}>
         <View style={styles.avatar}>
-          <Text style={styles.avatarText}>
+          <ThemedText style={styles.avatarText}>
             {item.profile?.username?.[0]?.toUpperCase() || "?"}
-          </Text>
+          </ThemedText>
         </View>
         <View>
-          <Text style={styles.username}>
+          <ThemedText type="bold" style={styles.username}>
             {item.profile?.username || "Unknown User"}
-          </Text>
-          <Text style={styles.timestamp}>
+          </ThemedText>
+          <ThemedText type="subtitle" style={styles.timestamp}>
             {new Date(item.created_at).toLocaleDateString()}
-          </Text>
+          </ThemedText>
         </View>
       </View>
 
-      <Text style={styles.content}>{item.content}</Text>
+      <ThemedText style={styles.content}>{item.content}</ThemedText>
 
       {item.image_url && (
   <View style={styles.imagePlaceholder}>
-    <Text>Image</Text>
+    <ThemedText>Image</ThemedText>
     <Image
       source={{ uri: item.image_url }}
       style={{
@@ -148,8 +149,8 @@ export default function FeedScreen() {
         }
         ListEmptyComponent={
           <View style={styles.empty}>
-            <Text style={styles.emptyText}>No posts yet</Text>
-            <Text style={styles.emptySubtext}>Be the first to share!</Text>
+            <ThemedText type="bold" style={styles.emptyText}>No posts yet</ThemedText>
+            <ThemedText type="subtitle" style={styles.emptySubtext}>Be the first to share!</ThemedText>
           </View>
         }
       />

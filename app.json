@@ -10,7 +10,10 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.yourname.framez"
+      "bundleIdentifier": "com.yourname.framez",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "com.yourname.framez"
@@ -19,8 +22,14 @@
       "bundler": "metro"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-font"
     ],
-    "scheme": "framez"
+    "scheme": "framez",
+    "extra": {
+      "eas": {
+        "projectId": "bb34c075-eb02-49b6-b245-72fc7b1ec6bd"
+      }
+    }
   }
 }
