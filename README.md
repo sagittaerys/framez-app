@@ -1,50 +1,155 @@
-# Welcome to your Expo app 👋
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## 🚀 Overview
+Framez-app is a versatile and feature-rich Expo project designed to help users share their moments effortlessly. This app leverages modern React Native and Expo technologies to provide a seamless user experience across Android, iOS, and the web. Whether you're a developer looking to build a social media app or a user who wants to share your experiences, Framez-app is the perfect starting point.
 
-## Get started
+## ✨ Features
+- 📸 Image upload and sharing
+- 🗣️ Text-based posts with rich formatting
+- 🌟 User profiles and authentication
+- 🔒 Secure user data with Supabase
+- 📱 Responsive design for mobile and web
 
-1. Install dependencies
+## 🛠️ Tech Stack
+- **Programming Language:** TypeScript
+- **Frameworks & Libraries:**
+  - Expo
+  - React Native
+  - React Navigation
+  - Supabase
+  - Lucide React Native
+- **Tools:**
+  - ESLint
+  - TypeScript
+  - Expo CLI
 
-   ```bash
-   npm install
-   ```
+##  Installation
 
-2. Start the app
+### Prerequisites
+- Node.js (v14 or later)
+- npm (v6 or later)
+- Expo CLI
 
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
+### Quick Start
 ```bash
-npm run reset-project
+# Clone the repository
+git clone https://github.com/yourusername/framez-app.git
+
+# Navigate to the project directory
+cd framez-app
+
+# Install dependencies
+npm install
+
+# Start the app
+npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### Alternative Installation Methods
+- **Using Yarn:**
+  ```bash
+  yarn install
+  yarn start
+  ```
 
-## Learn more
+- **Docker Setup:**
+  - Ensure Docker is installed
+  - Run `docker-compose up` in the project root
 
-To learn more about developing your project with Expo, look at the following resources:
+## 🎯 Usage
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### Basic Usage
+```typescript
+// Import necessary components and hooks
+import { useAuth } from '../src/context/AuthContext';
+import { supabase } from '../src/config/supabase';
 
-## Join the community
+// Example of fetching posts
+const fetchPosts = async () => {
+  try {
+    const { data, error } = await supabase
+      .from('posts')
+      .select('*')
+      .order('created_at', { ascending: false });
 
-Join our community of developers creating universal apps.
+    if (error) throw error;
+    console.log('Posts:', data);
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+  }
+};
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+// Call the function
+fetchPosts();
+```
+
+### Advanced Usage
+- **Customizing User Profiles:**
+  ```typescript
+  // Fetch user profile
+  const fetchProfile = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+      if (error) throw error;
+      console.log('Profile:', data);
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+    }
+  };
+
+  // Call the function
+  fetchProfile('user-id');
+  ```
+
+## 📁 Project Structure
+```
+framez-app/
+├── app/
+│   ├── (auth)/
+│   │   ├── _layout.tsx
+│   │   ├── login.tsx
+│   │   └── signup.tsx
+│   ├── (tabs)/
+│   │   ├── _layout.tsx
+│   │   ├── index.tsx
+│   │   ├── create.tsx
+│   │   └── profile.tsx
+│   ├── +not-found.tsx
+│   └── _layout.tsx
+├── components/
+│   ├── external-link.tsx
+│   ├── haptic-tab.tsx
+│   ├── hello-wave.tsx
+│   ├── parallax-scroll-view.tsx
+│   ├── themed-text.tsx
+│   ├── themed-view.tsx
+│   └── ui/
+│       ├── collapsible.tsx
+│       └── icon-symbol.tsx
+├── constants/
+│   └── theme.ts
+├── hooks/
+│   └── use-color-scheme.ts
+├── scripts/
+│   └── reset-project.js
+├── src/
+│   ├── config/
+│   │   └── supabase.ts
+│   ├── context/
+│   │   └── AuthContext.tsx
+│   └── types/
+│       └── index.ts
+├── .gitignore
+├── app.json
+├── eas.json
+├── eslint.config.js
+├── package.json
+├── package-lock.json
+├── tsconfig.json
+└── README.md
+```
+
