@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -6,8 +6,9 @@ import {
   StyleSheet,
   RefreshControl,
   ActivityIndicator,
-  Image,
+  Animated,
 } from "react-native";
+import { Image } from 'expo-image'; // Better caching and performance
 import { ThemedText } from "../../components/ThemedText";
 import { supabase } from "../../src/config/supabase";
 
@@ -29,6 +30,74 @@ interface Profile {
 interface PostWithProfile extends Post {
   profile?: Profile;
 }
+
+
+const ShimmerPlaceholder = () => {
+  const animatedValue = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(animatedValue, {
+          toValue: 1,
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(animatedValue, {
+          toValue: 0,
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  }, []);
+
+  const opacity = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0.3, 0.7],
+  });
+
+  return (
+    <Animated.View style={[styles.shimmer, { opacity }]}>
+      <View style={styles.shimmerContent}>
+        <ActivityIndicator size="large" color="#999" />
+        <Text style={styles.shimmerText}>Loading image...</Text>
+      </View>
+    </Animated.View>
+  );
+};
+
+// Post Image Component with Placeholder
+const PostImage = ({ uri }: { uri: string }) => {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  return (
+    <View style={styles.imageContainer}>
+      {loading && <ShimmerPlaceholder />}
+      
+      <Image
+        source={{ uri }}
+        style={styles.postImage}
+        contentFit="cover"
+        transition={300}
+        cachePolicy="memory-disk"
+        onLoadStart={() => setLoading(true)}
+        onLoadEnd={() => setLoading(false)}
+        onError={() => {
+          setLoading(false);
+          setError(true);
+        }}
+      />
+
+      {error && (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>Failed to load image</Text>
+        </View>
+      )}
+    </View>
+  );
+};
 
 export default function FeedScreen() {
   const [posts, setPosts] = useState<PostWithProfile[]>([]);
@@ -110,22 +179,7 @@ export default function FeedScreen() {
 
       <ThemedText style={styles.content}>{item.content}</ThemedText>
 
-      {item.image_url && (
-  <View style={styles.imagePlaceholder}>
-    <ThemedText>Image</ThemedText>
-    <Image
-      source={{ uri: item.image_url }}
-      style={{
-        width: '100%',
-        height: '100%',
-        borderRadius: 8,
-        resizeMode: 'cover',
-        position: 'absolute',
-      }}
-    />
-  </View>
-)}
-
+      {item.image_url && <PostImage uri={item.image_url} />}
     </View>
   );
 
@@ -147,10 +201,19 @@ export default function FeedScreen() {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        // Performance optimizations
+        initialNumToRender={5}
+        maxToRenderPerBatch={5}
+        windowSize={5}
+        removeClippedSubviews={true}
         ListEmptyComponent={
           <View style={styles.empty}>
-            <ThemedText type="bold" style={styles.emptyText}>No posts yet</ThemedText>
-            <ThemedText type="subtitle" style={styles.emptySubtext}>Be the first to share!</ThemedText>
+            <ThemedText type="bold" style={styles.emptyText}>
+              No posts yet
+            </ThemedText>
+            <ThemedText type="subtitle" style={styles.emptySubtext}>
+              Be the first to share!
+            </ThemedText>
           </View>
         }
       />
@@ -201,7 +264,7 @@ const styles = StyleSheet.create({
   username: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#000",
+    color: "#a78bfa",
   },
   timestamp: {
     fontSize: 12,
@@ -212,14 +275,53 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
     color: "#333",
+    marginBottom: 12,
   },
-  imagePlaceholder: {
-    height: 200,
-    backgroundColor: "#f5f5f5",
+  imageContainer: {
+    height: 300,
+    width: "100%",
     borderRadius: 8,
+    overflow: "hidden",
+    backgroundColor: "#f5f5f5",
+    position: "relative",
+  },
+  postImage: {
+    width: "100%",
+    height: "100%",
+  },
+  shimmer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "#e0e0e0",
     justifyContent: "center",
     alignItems: "center",
+    zIndex: 1,
+  },
+  shimmerContent: {
+    alignItems: "center",
+  },
+  shimmerText: {
     marginTop: 12,
+    fontSize: 14,
+    color: "#999",
+    fontWeight: "500",
+  },
+  errorContainer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "#f5f5f5",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  errorText: {
+    color: "#999",
+    fontSize: 14,
   },
   empty: {
     alignItems: "center",

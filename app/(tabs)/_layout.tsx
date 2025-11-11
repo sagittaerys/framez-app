@@ -1,35 +1,39 @@
-import { Tabs, Redirect } from 'expo-router';
-import { useAuth } from '../../src/context/AuthContext';
-import { View, ActivityIndicator, Text } from 'react-native';
-import { Home, Plus, User } from 'lucide-react-native';
+import { Tabs, Redirect } from "expo-router";
+import { useAuth } from "../../src/context/AuthContext";
+import { View, ActivityIndicator, Text } from "react-native";
+import { Home, Plus, User } from "lucide-react-native";
 
 export default function TabsLayout() {
   const { user, loading } = useAuth();
 
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#000" />
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#a78bfa" />
       </View>
     );
   }
 
-  // If not authenticated, redirect to auth
   if (!user) {
-    return <Redirect href="/login" />; 
+    return <Redirect href="/login" />;
   }
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#000',
-        tabBarInactiveTintColor: '#999',
+        headerTitleAlign: "center",
+        tabBarActiveTintColor: "#000",
+        tabBarInactiveTintColor: "#999",
         tabBarStyle: {
           borderTopWidth: 1,
-          borderTopColor: '#e0e0e0',
+          borderTopColor: "#e0e0e0",
         },
         headerStyle: {
-          backgroundColor: '#fff',
+          backgroundColor: "#fff",
+        },
+        headerTitleStyle: {
+          fontSize: 18,
+          color: "#a78bfa",
         },
         headerShadowVisible: false,
       }}
@@ -37,25 +41,43 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Feed',
-          tabBarLabel: 'Home',
-          tabBarIcon: ({ color }) => <Text style={{ fontSize: 24 }}> <Home />  </Text>,
+          title: "Framez",
+          tabBarIcon: ({ color }) => <Home color={color} size={24} />,
+          headerTitleStyle: {
+            fontFamily: "Blacksword",
+            fontSize: 24,
+            color: "#a78bfa",
+          },
         }}
       />
+
+      {/* Create Post Tab */}
       <Tabs.Screen
         name="create"
         options={{
-          title: 'Create Post',
-          tabBarLabel: 'Create',
-          tabBarIcon: ({ color }) => <Text style={{ fontSize: 24 }}> <Plus />  </Text>,
+          title: "Create Post",
+
+          tabBarIcon: ({ color }) => <Plus color={color} size={24} />,
+          headerTitleStyle: {
+            fontFamily: "Sora_300SemiBold",
+            fontSize: 24,
+            color: "#a78bfa",
+          },
         }}
       />
+
+      {/* Profile Tab */}
       <Tabs.Screen
         name="profile"
         options={{
-          title: 'Profile',
-          tabBarLabel: 'Profile',
-          tabBarIcon: ({ color }) => <Text style={{ fontSize: 24 }}> <User /> </Text>,
+          title: "Profile",
+
+          tabBarIcon: ({ color }) => <User color={color} size={24} />,
+          headerTitleStyle: {
+            fontFamily: "Sora_300SemiBold",
+            fontSize: 24,
+            color: "#a78bfa",
+          },
         }}
       />
     </Tabs>

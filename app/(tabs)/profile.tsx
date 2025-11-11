@@ -7,8 +7,8 @@ import {
   FlatList,
   ActivityIndicator,
   Alert,
-  Image,
 } from "react-native";
+import { Image } from 'expo-image'; 
 import { useAuth } from "../../src/context/AuthContext";
 import { supabase } from "../../src/config/supabase";
 import { ThemedText } from "../../components/ThemedText";
@@ -59,18 +59,39 @@ export default function ProfileScreen() {
     ]);
   };
 
-  // renderpost here - where i define the structure of each post in the grid
-  const renderPost = ({ item }: { item: Post }) => (
-    <View style={styles.postItem}>
-      {item.image_url ? (
-        <Image source={{ uri: item.image_url }} style={styles.postImage} />
-      ) : (
-        <View style={styles.noImage}>
-          <Text style={styles.noImageText}>No Image</Text>
-        </View>
-      )}
-    </View>
-  );
+  
+  const PostItem = ({ item }: { item: Post }) => {
+    const [imageLoading, setImageLoading] = useState(true);
+
+    return (
+      <View style={styles.postItem}>
+        {item.image_url ? (
+          <>
+            <Image
+              source={{ uri: item.image_url }}
+              style={styles.postImage}
+              contentFit="cover"
+              transition={200}
+              cachePolicy="memory-disk" // Cache images
+              onLoadStart={() => setImageLoading(true)}
+              onLoadEnd={() => setImageLoading(false)}
+            />
+            {imageLoading && (
+              <View style={styles.imageLoader}>
+                <ActivityIndicator size="small" color="#666" />
+              </View>
+            )}
+          </>
+        ) : (
+          <View style={styles.noImage}>
+            <Text style={styles.noImageText}>No Image</Text>
+          </View>
+        )}
+      </View>
+    );
+  };
+
+  const renderPost = ({ item }: { item: Post }) => <PostItem item={item} />;
 
   const ProfileHeader = () => (
     <View style={styles.header}>
@@ -80,9 +101,15 @@ export default function ProfileScreen() {
         </Text>
       </View>
 
-      <ThemedText type="bold" style={styles.name}>{profile?.full_name || "User"}</ThemedText>
-      <ThemedText type="subtitle" style={styles.username}>@{profile?.username || "username"}</ThemedText>
-      <ThemedText type="subtitle" style={styles.email}>{profile?.email || user?.email}</ThemedText>
+      <ThemedText type="bold" style={styles.name}>
+        {profile?.full_name || "User"}
+      </ThemedText>
+      <ThemedText type="subtitle" style={styles.username}>
+        @{profile?.username || "username"}
+      </ThemedText>
+      <ThemedText type="subtitle" style={styles.email}>
+        {profile?.email || user?.email}
+      </ThemedText>
 
       {profile?.bio && <Text style={styles.bio}>{profile.bio}</Text>}
 
@@ -119,6 +146,11 @@ export default function ProfileScreen() {
         contentContainerStyle={styles.list}
         numColumns={3}
         columnWrapperStyle={{ justifyContent: "space-between" }}
+        
+        initialNumToRender={9} // Load first 3 rows
+        maxToRenderPerBatch={9}
+        windowSize={5}
+        removeClippedSubviews={true}
         ListEmptyComponent={
           <View style={styles.empty}>
             <Text style={styles.emptyText}>No posts yet</Text>
@@ -225,20 +257,38 @@ const styles = StyleSheet.create({
     color: "#000",
     alignSelf: "flex-start",
   },
-  postCard: {
-    backgroundColor: "#f5f5f5",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-  },
-  postContent: {
-    fontSize: 14,
-    color: "#333",
+  postItem: {
+    width: "32%",
+    aspectRatio: 1,
     marginBottom: 8,
+    backgroundColor: "#f0f0f0",
+    borderRadius: 8,
+    overflow: "hidden",
+    position: "relative", // ADDED for loader positioning
   },
-  postDate: {
-    fontSize: 12,
+  postImage: {
+    width: "100%",
+    height: "100%",
+  },
+  // ADDED: Loading indicator for images
+  imageLoader: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f0f0f0",
+  },
+  noImage: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noImageText: {
     color: "#999",
+    fontSize: 12,
   },
   empty: {
     alignItems: "center",
@@ -254,28 +304,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#999",
   },
-    postItem: {
-    width: '32%',
-    
-    aspectRatio: 1,
-    marginBottom: 8,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 8,
-    overflow: 'hidden',
-  },
-  postImage: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-  },
-  noImage: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  noImageText: {
-    color: '#999',
-    fontSize: 12,
-  },
-
 });

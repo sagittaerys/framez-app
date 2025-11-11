@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -9,20 +9,20 @@ import {
   Platform,
   Alert,
   ActivityIndicator,
-} from 'react-native';
-import { Link } from 'expo-router';
-import { useAuth } from '../../src/context/AuthContext';
-import { ThemedText } from '../../components/ThemedText';
+} from "react-native";
+import { Link } from "expo-router";
+import { useAuth } from "../../src/context/AuthContext";
+import { ThemedText } from "../../components/ThemedText";
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const { signIn } = useAuth();
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert('Error', 'Please fill in all fields');
+      Alert.alert("Error", "Please fill in all fields");
       return;
     }
 
@@ -31,18 +31,31 @@ export default function LoginScreen() {
     setLoading(false);
 
     if (error) {
-      Alert.alert('Login Failed', error.message);
+      Alert.alert("Login Failed", error.message);
     }
   };
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
       <View style={styles.content}>
-        <ThemedText type='title' style={styles.title}>Framez</ThemedText>
-        <ThemedText type='subtitle' style={styles.subtitle}>Share your moments!</ThemedText>
+        <ThemedText
+          type="title"
+          style={{
+            fontFamily: "Blacksword",
+            color: "#a78bfa",
+            fontSize: 48,
+            textAlign: "center",
+            marginBottom: 8,
+          }}
+        >
+          Framez
+        </ThemedText>
+        <ThemedText type="subtitle" style={styles.subtitle}>
+          Share your moments!
+        </ThemedText>
 
         <View style={styles.form}>
           <TextInput
@@ -79,7 +92,10 @@ export default function LoginScreen() {
           <Link href="/signup" asChild>
             <TouchableOpacity style={styles.linkButton}>
               <ThemedText style={styles.linkText}>
-                Don't have an account? <ThemedText type='bold' style={styles.linkBold}>Sign Up</ThemedText>
+                Don't have an account?{" "}
+                <ThemedText type="bold" style={styles.linkBold}>
+                  Sign Up
+                </ThemedText>
               </ThemedText>
             </TouchableOpacity>
           </Link>
@@ -92,60 +108,61 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   content: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     paddingHorizontal: 24,
   },
   title: {
     fontSize: 48,
-    fontWeight: 'bold',
-    color: '#000',
-    textAlign: 'center',
+    fontWeight: "bold",
+    color: "#000",
+    textAlign: "center",
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
-    textAlign: 'center',
+    color: "#666",
+    textAlign: "center",
     marginBottom: 48,
   },
   form: {
-    width: '100%',
+    width: "100%",
   },
   input: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#f5f5f5",
     borderRadius: 8,
     padding: 16,
     fontSize: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#e0e0e0',
+    borderColor: "#e0e0e0",
+    fontFamily: 'Sora_400Regular',
   },
   button: {
-    backgroundColor: '#000',
+    backgroundColor: "#a78bfa",
     borderRadius: 8,
     padding: 16,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 8,
   },
   buttonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   linkButton: {
     marginTop: 24,
-    alignItems: 'center',
+    alignItems: "center",
   },
   linkText: {
-    color: '#666',
+    color: "#666",
     fontSize: 14,
   },
   linkBold: {
-    color: '#000',
-    fontWeight: '600',
+    color: "#a78bfa",
+    fontWeight: "600",
   },
 });

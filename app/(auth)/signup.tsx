@@ -59,7 +59,13 @@ export default function SignUpScreen() {
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.content}>
-          <ThemedText type='title' style={styles.title}>Create Account</ThemedText>
+          <ThemedText type='title' style={{
+            fontFamily: "Blacksword",
+            fontSize: 40,
+            textAlign: "center",
+            marginBottom: 8,
+            color: "#a78bfa",
+          }}>Create Account</ThemedText>
           <ThemedText type='subtitle' style={styles.subtitle}>Join Framez today!</ThemedText>
 
           <View style={styles.form}>
@@ -113,9 +119,9 @@ export default function SignUpScreen() {
 
             <Link href="/login" asChild>
               <TouchableOpacity style={styles.linkButton}>
-                <Text style={styles.linkText}>
-                  Already have an account? <Text style={styles.linkBold}>Log In</Text>
-                </Text>
+                <ThemedText style={styles.linkText}>
+                  Already have an account? <ThemedText type='bold' style={styles.linkBold}>Log In</ThemedText>
+                </ThemedText>
               </TouchableOpacity>
             </Link>
           </View>
@@ -163,9 +169,10 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     borderWidth: 1,
     borderColor: '#e0e0e0',
+    fontFamily: 'Sora_400Regular',
   },
   button: {
-    backgroundColor: '#000',
+    backgroundColor: '#a78bfa',
     borderRadius: 8,
     padding: 16,
     alignItems: 'center',
@@ -185,7 +192,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   linkBold: {
-    color: '#000',
+    color: '#a78bfa',
     fontWeight: '600',
   },
 });
