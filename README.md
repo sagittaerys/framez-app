@@ -1,3 +1,11 @@
+## 🎥 Demo Video
+
+Experience **Framez** in action — a mobile social app built with React Native.  
+Watch the demo below to see the core features: authentication, posting, and user profiles.
+
+🔗 [**Watch Demo Video on Google Drive**](https://drive.google.com/drive/folders/18tuajPK6SUg7g94aXW1cpm6Pau7r4xo5)
+
+---
 
 ## 🚀 Overview
 Framez-app is a versatile and feature-rich Expo project designed to help users share their moments effortlessly. This app leverages modern React Native and Expo technologies to provide a seamless user experience across Android, iOS, and the web. Whether you're a developer looking to build a social media app or a user who wants to share your experiences, Framez-app is the perfect starting point.
